@@ -43,6 +43,8 @@ TIM_HandleTypeDef htim3;
 
 /* USER CODE BEGIN PV */
 
+int i;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -89,6 +91,10 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);		// PA6 Start R
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);		// PA7 Start G
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);		// PB0 Start B
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -98,6 +104,36 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
+	  /** Sabit renk oluştur mak için belirtilen chanallara rgb renk kodlarını yazmak yeterli olacaktır. **/
+
+	  /*  TIM3 -> CCR1 = 255;
+	  	  TIM3 -> CCR2 = 0;				// Fusya renk kodları.
+	  	  TIM3 -> CCR3 = 255; */
+
+
+	  /** Ayrı ayrı "for" donguleri olmadan rgb led çalışmasının farklı renkler için olan versiyonu gözlemlenmedi.  **/
+	  /** Bu sekilde ayrı ayrı "for" donguleri olusturularak LED lerde olan renk degisimleri gozlemlenmıs oldu.     **/
+
+	  for (i=0; i<=255; i++)
+	  {
+		  __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, i);		// led R 	with HAL
+//		  TIM3 -> CCR1 = i;										//			with Register
+		  HAL_Delay(5);
+	  }
+	  for (i=0; i<=255; i++)
+	  {
+//		  __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, i);		// led G
+		  TIM3 -> CCR2 = i;
+		  HAL_Delay(5);
+	  }
+	  for (i=0; i<=255; i++)
+	  {
+		  __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, i);		// led B
+//		  TIM3 -> CCR3 = i;
+		  HAL_Delay(5);
+	  }
+
   }
   /* USER CODE END 3 */
 }
